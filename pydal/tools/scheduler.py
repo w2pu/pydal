@@ -208,7 +208,8 @@ class Scheduler:  # pylint: disable=too-many-instance-attributes
                 db.commit()
                 self.logger.info("run died #%i %s", run.id, run.name)
             # check for processes that timedout
-            if run.timeout and run.started_on + delta(run.timeout) < now():
+            #if run.timeout and run.started_on.replace(tzinfo=None) + delta(run.timeout) < now():
+            if run.timeout and run.started_on + delta(run.timeout) < now():    
                 os.kill(run.pid, signal.SIGKILL)
                 log = self.retrieve_log(run) + self._end_tag(
                     status="timeout", completed_on=t_end
